@@ -244,11 +244,13 @@ public class Controller implements IController
 	    				break;
 	    				
 	    			case AI:
-	    				//reset the level; the solution contains moves from the beginning of the level
+	    				//reset the level; when a solution is found, it will contain moves from the beginning of the level
 	    				getGame().flagLevelReset();
 	    				
-	    				//start the AI
-	    				getGame().setAISolving();
+	    				//pause the game, and start the solver activity
+	    				getGame().getScreen().setState(ScreenManager.State.Paused);
+	    				String level = getGame().getLevels().getLevelAsText();
+	    				getGame().getScreen().getPanel().getActivity().startAIActivity(level);
 	    				break;
     			
 	    			default:

@@ -17,7 +17,6 @@ import com.gamesbykevin.sokoban.level.LevelHelper;
 import com.gamesbykevin.sokoban.level.Levels;
 import com.gamesbykevin.sokoban.player.Player;
 import com.gamesbykevin.sokoban.player.PlayerHelper;
-import com.gamesbykevin.sokoban.screen.OptionsScreen;
 import com.gamesbykevin.sokoban.screen.ScreenManager;
 import com.gamesbykevin.sokoban.storage.scorecard.ScoreCard;
 import com.gamesbykevin.sokoban.thread.MainThread;
@@ -66,9 +65,6 @@ public final class Game implements IGame
     private boolean levelReset = false;
     
     //is the AI solving the level
-    private boolean startAiSolving = false;
-    
-    //is the AI solving the level
     private boolean aiSolving = false;
     
     /**
@@ -92,9 +88,6 @@ public final class Game implements IGame
         
         //create new controller
         this.controller = new Controller(this);
-        
-        //create new artificial intelligence object
-        this.ai = new AI();
     }
     
     /**
@@ -169,10 +162,6 @@ public final class Game implements IGame
      */
     public void flagLevelReset()
     {
-    	//stop AI if it is running
-    	this.aiSolving = false;
-    	
-    	//reset
     	this.levelReset = true;
     }
     
@@ -372,18 +361,6 @@ public final class Game implements IGame
     		//reset the controller
     		getController().reset();
     		
-    		if (startAiSolving)
-    		{
-    			//clear start flag
-    			startAiSolving = false;
-    			
-    			//enable AI state
-    			aiSolving = true;
-    			
-    			//assign the level index based on the level selection
-    			getAI().reset(getLevels().getLevelSelect().getLevelIndex());
-    		}
-    		
     		//no need to continue
     		return;
     	}
@@ -466,65 +443,6 @@ public final class Game implements IGame
         		
         		//reset the player position
                 getPlayer().reset(getLevels().getLevel());
-                
-                //if debugging set/reset the ai
-                if (MainThread.DEBUG)
-                {
-                	//determine which list of solved levels we need to use
-                	switch (getScreen().getScreenOptions().getIndex(OptionsScreen.ButtonKey.Difficulty))
-                	{
-	                	case 0:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_EASY_A);
-	                		break;
-	                		
-	                	case 1:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_EASY_B);
-	                		break;
-	                		
-	                	case 2:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_EASY_C);
-	                		break;
-	                		
-	                	case 3:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_EASY_D);
-	                		break;
-	                		
-	                	case 4:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_MEDIUM_A);
-	                		break;
-	                		
-	                	case 5:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_MEDIUM_B);
-	                		break;
-	                		
-	                	case 6:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_MEDIUM_C);
-	                		break;
-	                		
-	                	case 7:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_MEDIUM_D);
-	                		break;
-	                		
-	                	case 8:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_HARD_A);
-	                		break;
-	                		
-	                	case 9:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_HARD_B);
-	                		break;
-	                		
-	                	case 10:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_HARD_C);
-	                		break;
-	                		
-	                	case 11:
-	                		getAI().setLevels(Assets.TextAiInstructionsKey.SOLVED_HARD_D);
-	                		break;
-	                		
-                		default:
-	                		throw new Exception("Solution is missing here " + getScreen().getScreenOptions().getIndex(OptionsScreen.ButtonKey.Difficulty));
-                	}
-                }
         	}
         }
     }
@@ -532,9 +450,10 @@ public final class Game implements IGame
     /**
      * Start AI solution playback
      */
-    public void setAISolving()
+    public void setAISolving(AI ai)
     {
-        this.startAiSolving = true;
+        this.ai = ai;
+        this.aiSolving = true;
     }
     
     @Override

@@ -77,7 +77,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Di
      * Get the screen manager 
      * @return The screen manager containing all our screens
      */
-    private ScreenManager getScreen()
+    public ScreenManager getScreen()
     {
     	return this.screen;
     }

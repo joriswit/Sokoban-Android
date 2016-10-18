@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.gamesbykevin.sokoban.ai.AI;
 import com.gamesbykevin.sokoban.panel.GamePanel;
 
 public class MainActivity extends Activity
@@ -163,5 +164,22 @@ public class MainActivity extends Activity
     private void setGamePanel(final GamePanel panel)
     {
         this.panel = panel;
+    }
+    
+    static final int SOLVER_REQUEST = 1936682102; // "solv"
+    
+    public void startAIActivity(String level) {
+        Intent intent = new Intent("nl.joriswit.sokosolver.SOLVE");
+        intent.putExtra("LEVEL", level);
+        startActivityForResult(intent, SOLVER_REQUEST);
+    }
+    
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == SOLVER_REQUEST && resultCode == RESULT_OK) {
+            String solution = data.getStringExtra("SOLUTION");
+            if(solution != null) {
+                getGamePanel().getScreen().getScreenGame().getGame().setAISolving(new AI(solution));
+            }
+        }
     }
 }

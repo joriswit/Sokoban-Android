@@ -23,7 +23,7 @@ public class GameScreen implements Screen, Disposable
         this.screen = screen;
     }
     
-    protected Game getGame()
+    public Game getGame()
     {
         return this.game;
     }

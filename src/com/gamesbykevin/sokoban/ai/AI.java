@@ -84,6 +84,11 @@ public class AI
 			System.out.println("Index=" + index + ",Steps=" + instructions);
 	}
 	
+	public AI(String instructions) 
+	{
+		this.instructions = instructions;
+	}
+
 	public void update(final Player player, final Level level)
 	{
 		//stay inbounds

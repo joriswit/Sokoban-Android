@@ -244,6 +244,21 @@ public final class Levels implements ILevels
     }
     
     /**
+     * Build a string with the current level tracker
+     */
+    public String getLevelAsText()
+    {
+        //build a string with one line per row; followed by a newline character
+        StringBuilder levelAsText = new StringBuilder();
+        for (int i = getLevelTracker().getLineStart(); i <= getLevelTracker().getLineEnd(); i++)
+        {
+            levelAsText.append(Files.getText(getKey()).getLines().get(i));
+            levelAsText.append('\n');
+        }
+        return levelAsText.toString();
+    }
+    
+    /**
      * Recycle resources
      */
     @Override
