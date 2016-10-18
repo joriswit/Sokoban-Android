@@ -65,6 +65,12 @@ public final class Game implements IGame
     //do we reset the current level
     private boolean levelReset = false;
     
+    //is the AI solving the level
+    private boolean startAiSolving = false;
+    
+    //is the AI solving the level
+    private boolean aiSolving = false;
+    
     /**
      * The default length you have to move your finger in order to trigger the player to move
      */
@@ -163,6 +169,10 @@ public final class Game implements IGame
      */
     public void flagLevelReset()
     {
+    	//stop AI if it is running
+    	this.aiSolving = false;
+    	
+    	//reset
     	this.levelReset = true;
     }
     
@@ -362,6 +372,18 @@ public final class Game implements IGame
     		//reset the controller
     		getController().reset();
     		
+    		if (startAiSolving)
+    		{
+    			//clear start flag
+    			startAiSolving = false;
+    			
+    			//enable AI state
+    			aiSolving = true;
+    			
+    			//assign the level index based on the level selection
+    			getAI().reset(getLevels().getLevelSelect().getLevelIndex());
+    		}
+    		
     		//no need to continue
     		return;
     	}
@@ -419,7 +441,7 @@ public final class Game implements IGame
                     getController().update();
                     
                     //only update the ai if debugging
-                    if (MainThread.DEBUG)
+                    if (aiSolving)
                     {
 	                    //update the ai
 	                    getAI().update(getPlayer(), getLevels().getLevel());
@@ -502,12 +524,17 @@ public final class Game implements IGame
                 		default:
 	                		throw new Exception("Solution is missing here " + getScreen().getScreenOptions().getIndex(OptionsScreen.ButtonKey.Difficulty));
                 	}
-                	
-                	//assign the level index based on the level selection
-                	getAI().reset(getLevels().getLevelSelect().getLevelIndex());
                 }
         	}
         }
+    }
+    
+    /**
+     * Start AI solution playback
+     */
+    public void setAISolving()
+    {
+        this.startAiSolving = true;
     }
     
     @Override

@@ -94,6 +94,7 @@ public class Assets
         LevelIconIncomplete, 
         LevelNext,
         LevelPrevious, 
+        AI,
         Exit, 
         Pause, 
         Reset,

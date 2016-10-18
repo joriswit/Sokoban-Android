@@ -50,6 +50,7 @@ public class Controller implements IController
         tmp.add(Assets.ImageGameKey.Pause);
         tmp.add(Assets.ImageGameKey.Exit);
         tmp.add(Assets.ImageGameKey.Reset);
+        tmp.add(Assets.ImageGameKey.AI);
         
         //create new list of buttons
         this.buttons = new HashMap<Assets.ImageGameKey, Button>();
@@ -63,6 +64,9 @@ public class Controller implements IController
         //reset button
         this.buttons.get(Assets.ImageGameKey.Reset).setX(RESET_X);
         this.buttons.get(Assets.ImageGameKey.Reset).setY(RESET_Y);
+        
+        this.buttons.get(Assets.ImageGameKey.AI).setX(RESET_X - 64);
+        this.buttons.get(Assets.ImageGameKey.AI).setY(RESET_Y);
         
         int x = 40;
         final int y = 710;
@@ -238,6 +242,14 @@ public class Controller implements IController
 	                	//reset current level
 	                	getGame().flagLevelReset();
 	    				break;
+	    				
+	    			case AI:
+	    				//reset the level; the solution contains moves from the beginning of the level
+	    				getGame().flagLevelReset();
+	    				
+	    				//start the AI
+	    				getGame().setAISolving();
+	    				break;
     			
 	    			default:
 	    				throw new Exception("Key is not handled here: " + key.toString());
@@ -286,6 +298,7 @@ public class Controller implements IController
             buttons.get(Assets.ImageGameKey.Pause).render(canvas);
             buttons.get(Assets.ImageGameKey.Exit).render(canvas);
             buttons.get(Assets.ImageGameKey.Reset).render(canvas);
+            buttons.get(Assets.ImageGameKey.AI).render(canvas);
         }
     }
 }
